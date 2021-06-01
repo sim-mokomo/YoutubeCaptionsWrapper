@@ -1,0 +1,26 @@
+{
+    "name":"YoutubeCaptionWrapper",
+    "version":"1.0",
+    "description":"Youtubeの字幕ををDeepLで翻訳して表示させる",
+    "permissions": ["tabs", "https://*/*"],
+    "content_scripts":[
+        {
+          "matches":[
+            "https://*/*"
+          ],
+          "js":[
+            "content.js"
+          ],
+          "run_at": "document_end",
+          "all_frames": true
+        }
+      ],
+    "manifest_version":2,
+    "web_accessible_resources": [
+      "main.js",
+      "caption.js",
+      "caption-list.js",
+      "connection.js",
+      "app-config.js"
+    ]
+}
