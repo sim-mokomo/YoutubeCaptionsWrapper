@@ -1,0 +1,3 @@
+# YoutubeCaptionsWrapper
+
+Youtube字幕をDeepLで翻訳して表示させる
