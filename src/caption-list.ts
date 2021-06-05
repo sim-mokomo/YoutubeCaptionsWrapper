@@ -1,21 +1,25 @@
 import {Caption} from "./caption.js";
 
 export class CaptionList {
-    readonly list : Caption[]
+    readonly captions : Caption[]
 
     constructor() {
-        this.list = []
+        this.captions = []
     }
 
     addList(caption : Caption) : void {
-        this.list.push(caption)
+        this.captions.push(caption)
+    }
+
+    empty() : boolean{
+        return this.captions.length <= 0
     }
 
     findCaptionBySeconds(seconds:number) : Caption{
-        const caption = this.list.find(x => x.renderSeconds == seconds)
+        const caption = this.captions.find(x => x.renderSeconds == seconds)
         if(caption == null){
-            const nearMaxSecondsCaptionIndex = this.list.findIndex(x => x.renderSeconds >= seconds)
-            return this.list[nearMaxSecondsCaptionIndex - 1]
+            const nearMaxSecondsCaptionIndex = this.captions.findIndex(x => x.renderSeconds >= seconds)
+            return this.captions[nearMaxSecondsCaptionIndex - 1]
         }
         return caption
     }
