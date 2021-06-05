@@ -2,18 +2,15 @@ import { Deepl } from "./deepl.js";
 import {CaptionList} from "./caption-list.js";
 import {Caption} from "./caption.js";
 import {FirebaseFacade} from "./firebase-facade.js";
+import {Chrome} from "./chrome.js"
 
-const firebase = new FirebaseFacade()
-firebase.initialize()
+const firebaseFacade = new FirebaseFacade()
+firebaseFacade.initialize()
 
 const translatedButton = document.getElementById("translated-by-deepL");
 if (translatedButton) {
     translatedButton.onclick = () => {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            const tab = tabs[0];
-            if (tab.id == null) {
-                return;
-            }
+        new Chrome().getCurrentTab(tab => {
             chrome.tabs.sendMessage(tab.id, {
                 methodName: "createTranslatedCaptions"
             }, response => {
@@ -33,6 +30,7 @@ if (translatedButton) {
 
                             translatedCaptions.captions.sort((x,y) => {return x.renderSeconds - y.renderSeconds})
                             console.log(translatedCaptions)
+                            // import firebase from "firebase"
                             const db = firebase.firestore()
                             db
                                 .collection("translated_captions")
@@ -48,19 +46,14 @@ if (translatedButton) {
                     })
                 }
             });
-        });
+        })
     };
 }
 
 const replaceButton = document.getElementById("replace-by-deepL")
 if(replaceButton){
     replaceButton.onclick = () => {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            const tab = tabs[0];
-            if (tab.id == null) {
-                return;
-            }
-
+        new Chrome().getCurrentTab(tab => {
             chrome.tabs.sendMessage(tab.id, {
                 methodName: "requestReplaceCaptions"
             }, response => {
@@ -82,6 +75,6 @@ if(replaceButton){
                         }
                     })
             });
-        });
+        })
     }
 }
