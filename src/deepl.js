@@ -10,4 +10,11 @@ export class Deepl {
             callback(obj["translations"][0]["text"]);
         });
     }
+    translateSync(text, targetLanguage) {
+        return new Promise(resolve => {
+            this.translate(text, targetLanguage, translatedText => {
+                resolve(translatedText);
+            });
+        });
+    }
 }
