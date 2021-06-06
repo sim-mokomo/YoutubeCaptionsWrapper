@@ -1,12 +1,20 @@
 import { Deepl } from "./deepl.js";
 import {CaptionList} from "./caption-list.js";
 import {Caption} from "./caption.js";
-import {FirebaseFacade} from "./firebase-facade.js";
 import {Chrome} from "./chrome.js"
 import {TranslatedCaptionsRepository} from "./translated-captions-repository.js";
+import {ConfigsRepository} from "./configs-repository.js";
 
-const firebaseFacade = new FirebaseFacade()
-firebaseFacade.initialize()
+const config = new ConfigsRepository()
+firebase.initializeApp({
+    apiKey: config.apiKey,
+    authDomain: config.authDomain,
+    projectId: config.projectId,
+    storageBucket: config.storageBucket,
+    messagingSenderId: config.messagingSenderId,
+    appId: config.appId,
+    measurementId: config.measurementId
+});
 
 const translatedButton = document.getElementById("translated-by-deepL");
 if (translatedButton) {

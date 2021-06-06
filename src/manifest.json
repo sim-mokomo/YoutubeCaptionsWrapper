@@ -27,7 +27,6 @@
       "deepl.js",
       "popup.html",
       "popup-main.js",
-      "firebase-facade.js",
       "firebase-config.js",
       "chrome.js",
       "option.js"

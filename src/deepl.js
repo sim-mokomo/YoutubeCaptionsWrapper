@@ -1,11 +1,11 @@
-import { AppConfig } from "./app-config.js";
 import { Connection } from "./connection.js";
+import { ConfigsRepository } from "./configs-repository.js";
 export class Deepl {
     constructor() {
-        this.appConfig = new AppConfig();
+        this.config = new ConfigsRepository().loadDeepLConfig();
     }
     translate(text, targetLanguage, callback) {
-        Connection.postRequest(`auth_key=${this.appConfig.deepLAPIKey}&text=${text}&target_lang=${targetLanguage}`, "https://api-free.deepl.com/v2/translate", response => {
+        Connection.postRequest(`auth_key=${this.config.deepLAPIKey}&text=${text}&target_lang=${targetLanguage}`, "https://api-free.deepl.com/v2/translate", response => {
             const obj = JSON.parse(response);
             callback(obj["translations"][0]["text"]);
         });
