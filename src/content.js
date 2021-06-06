@@ -85,23 +85,18 @@ function createTranslatedCaptions() {
     const captionObjs = [];
     for (const caption of captionContainer.children) {
         if (caption.children[0].innerHTML) {
-            const captionSecondNumbers = caption
-                .children[0]
-                .innerHTML
-                .trim()
-                .split(':')
-                .map(x => parseInt(x));
-            const captionSecond = captionSecondNumbers[0] * 60 + captionSecondNumbers[1];
-            const captionContent = caption
-                .children[1]
-                .getElementsByClassName("cue ytd-transcript-body-renderer")[0]
-                .innerHTML
-                .trim()
-                .split('\n')
-                .join(' ');
             const captionObj = {
-                second: captionSecond,
-                content: captionContent
+                second: CaptionModule.parseSecondsString(
+                    caption
+                        .children[0]
+                        .innerHTML
+                ),
+                content: CaptionModule.parseCaptionString(
+                    caption
+                        .children[1]
+                        .getElementsByClassName("cue ytd-transcript-body-renderer")[0]
+                        .innerHTML
+                )
             };
             captionObjs.push(captionObj);
         }
