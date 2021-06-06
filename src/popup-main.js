@@ -22,22 +22,11 @@ if (translatedButton) {
         const translatedCaptions = new CaptionList()
         for (const captionObj of response.captionObjs) {
             deepL.translate(captionObj.content, "JA", translatedText => {
-                const translatedCaption = new Caption(parseInt(captionObj.second), translatedText)
-                translatedCaptions.addList(translatedCaption)
+                translatedCaptions.addList(new Caption(parseInt(captionObj.second), translatedText))
                 if(translatedCaptions.captions.length == response.captionObjs.length) {
                     translatedCaptions.captions.sort((x,y) => {return x.renderSeconds - y.renderSeconds})
-                    // import firebase from "firebase"
-                    const db = firebase.firestore()
-                    db
-                        .collection("translated_captions")
-                        .doc(response.videoId)
-                        .set({captions: JSON.stringify(translatedCaptions)})
-                        .then(() => {
-                            console.log("Document successfully written!");
-                        })
-                        .catch((error) => {
-                            console.error("Error writing document: ", error);
-                        })
+                    const videoId = response.videoId
+                    new TranslatedCaptionsRepository().saveCaptionsJson(videoId, translatedCaptions)
                 }
             })
         }

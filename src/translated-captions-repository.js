@@ -11,4 +11,18 @@ export class TranslatedCaptionsRepository {
                 })
         })
     }
+
+    saveCaptionsJson(videoId, captionList){
+        const db = firebase.firestore()
+        db
+            .collection("translated_captions")
+            .doc(videoId)
+            .set({captions: JSON.stringify(captionList)})
+            .then(() => {
+                console.log("Document successfully written!");
+            })
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            })
+    }
 }
