@@ -1,17 +1,20 @@
 'use strict';
+let CaptionModule
+let CaptionListModule
+let youtubeModule
 
 void (async () => {
-    const CaptionModule = await import(chrome.runtime.getURL("caption.js"));
-    const CaptionListModule = await import(chrome.runtime.getURL("caption-list.js"));
+    CaptionModule = await import(chrome.runtime.getURL("caption.js"));
+    CaptionListModule = await import(chrome.runtime.getURL("caption-list.js"));
+    youtubeModule = await import(chrome.runtime.getURL("youtube.js"))
     let captionList = new CaptionListModule.CaptionList();
 
     chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         if(message.methodName == "createTranslatedCaptions"){
             sendResponse(createTranslatedCaptions());
         }else if(message.methodName == "requestReplaceCaptions"){
-            const videoId = getVideoId()
             sendResponse({
-                videoId: videoId
+                videoId: youtubeModule.getCurrentUrlVideoId()
             })
         }else if(message.methodName == "sendReplaceCaptionsData"){
             Object.assign(captionList, JSON.parse(message.captionListJson))
@@ -76,7 +79,7 @@ function createTranslatedCaptions() {
     if (body == null) {
         return;
     }
-    let videoId = getVideoId()
+
     // note: 表示されている文字起こしを変換用の字幕に変換
     const captionContainer = body.getElementsByClassName("ytd-transcript-renderer")[0];
     const captionObjs = [];
@@ -105,17 +108,7 @@ function createTranslatedCaptions() {
     }
 
     return {
-        videoId: videoId,
+        videoId: youtubeModule.getCurrentUrlVideoId(),
         captionObjs: captionObjs
     }
-}
-
-function getVideoId(){
-    const url = location.href;
-    let videoId = url.split('v=')[1];
-    const ampersandPosition = videoId.indexOf('&');
-    if (ampersandPosition != -1) {
-        videoId = videoId.substring(0, ampersandPosition);
-    }
-    return videoId
 }
