@@ -14,7 +14,7 @@ void (async () => {
                 videoId: videoId
             })
         }else if(message.methodName == "sendReplaceCaptionsData"){
-            Object.assign(captionList, JSON.parse(message.captionListJson["captions"]))
+            Object.assign(captionList, JSON.parse(message.captionListJson))
             captionList.addList(new CaptionModule.Caption(999999, ""));
             sendResponse({})
         }

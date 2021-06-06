@@ -1,7 +1,16 @@
 export class Chrome {
-    getCurrentTab(callback) {
-        chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-            callback(tabs[0]);
+    getCurrentTabSync() {
+        return new Promise(resolve => {
+            chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+                resolve(tabs[0]);
+            });
+        });
+    }
+    sendMessageSync(tabId, sendObj) {
+        return new Promise(resolve => {
+            chrome.tabs.sendMessage(tabId, sendObj, response => {
+                resolve(response);
+            });
         });
     }
 }
