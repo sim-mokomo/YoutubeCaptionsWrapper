@@ -1,4 +1,5 @@
 export class TranslatedCaptionsRepository {
+    // todo: jsonであることを意識しない実装にする
     getCaptionsJson(videoId) {
         return new Promise(resolve => {
             const db = firebase.firestore()

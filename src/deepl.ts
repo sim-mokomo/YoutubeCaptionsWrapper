@@ -4,10 +4,15 @@ import {ConfigsRepository} from "./configs-repository.js";
 
 export class Deepl
 {
-    config : DeeplConfig
+    config : DeeplConfig = new DeeplConfig()
 
     constructor() {
-        this.config = new ConfigsRepository().loadDeepLConfig()
+        void this.initialize()
+    }
+
+    async initialize(){
+        const repository = new ConfigsRepository()
+        this.config = await repository.loadDeepLConfig()
     }
 
     translate(text:string, targetLanguage:string, callback:(translatedText:string)=>void) : void {

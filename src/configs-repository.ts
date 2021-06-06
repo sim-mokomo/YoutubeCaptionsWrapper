@@ -3,29 +3,35 @@ import {FirebaseConfig} from "./firebase-config.js";
 
 export class ConfigsRepository
 {
-    loadDeepLConfig(){
-        chrome.storage.sync.get({
-            deepL_config: "",
-            firebase_config: ""
-        }, (items) => {
-            const deepLConfigJson = items["deepL_config"];
-            if (deepLConfigJson.length > 0) {
-                return JSON.parse(deepLConfigJson);
-            }
-        });
-        return new DeeplConfig()
+    loadDeepLConfig() : Promise<DeeplConfig>{
+        return new Promise(resolve => {
+            chrome.storage.sync.get({
+                deepL_config: "",
+                firebase_config: ""
+            }, (items) => {
+                const json = items["deepL_config"];
+                if (json.length > 0) {
+                    const config = new DeeplConfig()
+                    Object.assign(config, JSON.parse(json));
+                    resolve(config)
+                }
+            });
+        })
     }
 
-    loadFirebaseConfig(){
-        chrome.storage.sync.get({
-            deepL_config: "",
-            firebase_config: ""
-        }, (items) => {
-            const firebaseConfigJson = items["firebase_config"];
-            if (firebaseConfigJson.length > 0) {
-                return JSON.parse(firebaseConfigJson);
-            }
-        });
-        return new FirebaseConfig()
+    loadFirebaseConfig() : Promise<FirebaseConfig>{
+        return new Promise(resolve => {
+            chrome.storage.sync.get({
+                deepL_config: "",
+                firebase_config: ""
+            }, (items) => {
+                const json = items["firebase_config"];
+                if (json.length > 0) {
+                    const config = new FirebaseConfig()
+                    Object.assign(config, JSON.parse(json));
+                    resolve(config)
+                }
+            });
+        })
     }
 }

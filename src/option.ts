@@ -32,10 +32,12 @@ function save_options() {
     })
 }
 
-function restore_options() {
+async function restore_options() {
     const repository = new ConfigsRepository()
-    applyDeepLConfigView(repository.loadDeepLConfig())
-    applyFirebaseConfigView(repository.loadFirebaseConfig())
+    const deepLConfig = await repository.loadDeepLConfig()
+    const firebaseConfig = await repository.loadFirebaseConfig()
+    applyDeepLConfigView(deepLConfig)
+    applyFirebaseConfigView(firebaseConfig)
 }
 
 function applyDeepLConfigView(config: DeeplConfig) {
