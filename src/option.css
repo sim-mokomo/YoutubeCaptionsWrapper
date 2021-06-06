@@ -1,0 +1,17 @@
+.configs{
+    padding: 20px;
+}
+
+.buttons{
+    padding: 20px;
+}
+
+.config-title{
+    font-size: 30px;
+}
+
+.config-input{
+    display: flex;
+    flex-flow: column;
+    margin: 15px;
+}

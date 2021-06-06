@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="option.css">
+</head>
+<body>
+
+<div class="configs">
+    <span class="config-title">DeepL Configs</span>
+    <div class="config-input">
+        <span class="config-input-title">api key</span>
+        <input type="text", id="deepl-key-input">
+    </div>
+</div>
+
+<div class="configs">
+    <span class="config-title">Firebase Configs</span>
+    <div class="config-input">
+        <span class="config-input-title">api key</span>
+        <input type="text", id="firebase-apikey-input">
+    </div>
+    <div class="config-input">
+        <span class="config-input-title">auth domain</span>
+        <input type="text", id="auth-domain-input">
+    </div>
+    <div class="config-input">
+        <span class="config-input-title">project id</span>
+        <input type="text", id="project-id-input">
+    </div>
+    <div class="config-input">
+        <span class="config-input-title">storage bucket</span>
+        <input type="text", id="storage-bucket-input">
+    </div>
+    <div class="config-input">
+        <span class="config-input-title">messaging sender id</span>
+        <input type="text", id="messaging-sender-id-input">
+    </div>
+    <div class="config-input">
+        <span class="config-input-title">app id</span>
+        <input type="text", id="app-id-input">
+    </div>
+    <div class="config-input">
+        <span class="config-input-title">measurement id</span>
+        <input type="text", id="measurement-id-input">
+    </div>
+</div>
+
+<div class="buttons">
+    <button id="save">Save</button>
+</div>
+
+<script src="deepl-config.js", type="module"></script>
+<script src="firebase-config.js", type="module"></script>
+<script src="configs-repository.js", type="module"></script>
+<script src="option.js", type="module"></script>
+</body>
+</html>

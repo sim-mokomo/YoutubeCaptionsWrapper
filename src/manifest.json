@@ -2,7 +2,7 @@
     "name":"YoutubeCaptionWrapper",
     "version":"1.0",
     "description":"Youtubeの字幕ををDeepLで翻訳して表示させる",
-    "permissions": ["tabs", "https://www.youtube.com/*"],
+    "permissions": ["tabs", "https://www.youtube.com/*", "storage"],
     "content_scripts":[
         {
           "matches":[
@@ -23,18 +23,20 @@
       "caption.js",
       "caption-list.js",
       "connection.js",
-      "app-config.js",
+      "deepl-config.js",
       "deepl.js",
       "popup.html",
       "popup-main.js",
       "firebase-facade.js",
       "firebase-config.js",
-      "chrome.js"
+      "chrome.js",
+      "option.js"
     ],
     "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'",
     "browser_action": {
       "browser_style": true,
       "default_title": "Whereami?",
       "default_popup": "popup.html"
-    }
+    },
+    "options_page" : "option.html"
 }
