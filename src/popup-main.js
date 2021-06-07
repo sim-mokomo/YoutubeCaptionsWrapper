@@ -23,6 +23,18 @@ console.log("initialize firebase")
 const translatedButton = document.getElementById("translated-by-deepL");
 if (translatedButton) {
     translatedButton.onclick = async () => {
+        const customChrome = new Chrome()
+        const tab = await customChrome.getCurrentTabSync()
+        const videoId = await getCurrentPageVideoId(tab.id)
+        const captionsRepository = new TranslatedCaptionsRepository()
+        const hasCaption = await captionsRepository.hasCaption(videoId)
+        if(hasCaption){
+            // note: 字幕を取得
+            void await requestReplaceCaptions()
+        }else{
+            // note: 字幕を作る
+            void await createReplaceCaptions()
+            void await requestReplaceCaptions()
         }
     }
 }
@@ -74,3 +86,12 @@ async function requestReplaceCaptions() {
     })
 }
 
+
+// todo: 変換済みの場合
+// 1. 字幕を有効化させる
+// 2. firestoreから字幕を取得
+// x. 変換元が対象の字幕言語と一致していれば差し替える
+
+// todo: 未変換の場合
+// 1. 字幕を有効化させる
+// 2. 変換処理を行う

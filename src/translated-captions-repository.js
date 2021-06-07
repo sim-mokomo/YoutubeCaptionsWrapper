@@ -1,9 +1,27 @@
+import {ConfigsRepository} from "./configs-repository.js";
+
 export class TranslatedCaptionsRepository {
+
+    constructor() {
+        this.db = firebase.firestore()
+    }
+
     // todo: jsonであることを意識しない実装にする
+    hasCaption(videoId){
+        return new Promise(resolve => {
+            this.db
+                .collection("translated_captions")
+                .doc(videoId)
+                .get()
+                .then(x => {
+                    resolve(x.exists)
+                })
+        })
+    }
+
     getCaptionsJson(videoId) {
         return new Promise(resolve => {
-            const db = firebase.firestore()
-            db
+            this.db
                 .collection("translated_captions")
                 .doc(videoId)
                 .get()
@@ -14,8 +32,7 @@ export class TranslatedCaptionsRepository {
     }
 
     saveCaptionsJson(videoId, captionList){
-        const db = firebase.firestore()
-        db
+        this.db
             .collection("translated_captions")
             .doc(videoId)
             .set({captions: JSON.stringify(captionList)})
