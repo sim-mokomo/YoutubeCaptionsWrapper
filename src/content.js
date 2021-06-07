@@ -7,19 +7,18 @@ void (async () => {
     CaptionModule = await import(chrome.runtime.getURL("caption.js"));
     CaptionListModule = await import(chrome.runtime.getURL("caption-list.js"));
     youtubeModule = await import(chrome.runtime.getURL("youtube.js"))
+
     let captionList = new CaptionListModule.CaptionList();
 
     chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-        if(message.methodName == "createTranslatedCaptions"){
+        if(message.methodName == "requestCurrentPageCaptionList"){
             sendResponse(createTranslatedCaptions());
-        }else if(message.methodName == "requestReplaceCaptions"){
-            sendResponse({
-                videoId: youtubeModule.getCurrentUrlVideoId()
-            })
-        }else if(message.methodName == "sendReplaceCaptionsData"){
+        }else if(message.methodName == "sendReplaceCaptionsData") {
             Object.assign(captionList, JSON.parse(message.captionListJson))
             captionList.addList(new CaptionModule.Caption(999999, ""));
             sendResponse({})
+        }else if(message.methodName == "requestCurrentPageVideoId"){
+            sendResponse(createCurrentPageVideoIdResponse())
         }
         return true;
     });
@@ -82,28 +81,32 @@ function createTranslatedCaptions() {
 
     // note: 表示されている文字起こしを変換用の字幕に変換
     const captionContainer = body.getElementsByClassName("ytd-transcript-renderer")[0];
-    const captionObjs = [];
+    const captions = new CaptionListModule.CaptionList()
     for (const caption of captionContainer.children) {
         if (caption.children[0].innerHTML) {
-            const captionObj = {
-                second: CaptionModule.parseSecondsString(
-                    caption
-                        .children[0]
-                        .innerHTML
-                ),
-                content: CaptionModule.parseCaptionString(
-                    caption
-                        .children[1]
-                        .getElementsByClassName("cue ytd-transcript-body-renderer")[0]
-                        .innerHTML
+            captions.addList(
+                new CaptionModule.Caption(
+                    CaptionModule.Caption.parseSecondsString(
+                        caption
+                            .children[0]
+                            .innerHTML
+                    ),
+                    CaptionModule.Catpion.parseCaptionString(
+                        caption
+                            .children[1]
+                            .getElementsByClassName("cue ytd-transcript-body-renderer")[0]
+                            .innerHTML
+                    )
                 )
-            };
-            captionObjs.push(captionObj);
+            )
         }
     }
 
+    return { captionListJson: JSON.stringify(captions) }
+}
+
+function createCurrentPageVideoIdResponse() {
     return {
-        videoId: youtubeModule.getCurrentUrlVideoId(),
-        captionObjs: captionObjs
+        videoId: youtubeModule.Youtube.getCurrentUrlVideoId()
     }
 }

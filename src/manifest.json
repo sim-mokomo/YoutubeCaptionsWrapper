@@ -29,7 +29,8 @@
       "popup-main.js",
       "firebase-config.js",
       "chrome.js",
-      "option.js"
+      "option.js",
+      "youtube.js"
     ],
     "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'",
     "browser_action": {
