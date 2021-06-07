@@ -1,5 +1,4 @@
-"use strict";
-class Youtube {
+export class Youtube {
     static getCurrentUrlVideoId() {
         return this.getVideoIdFromUrl(location.href);
     }

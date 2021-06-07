@@ -1,4 +1,4 @@
-class Youtube
+export class Youtube
 {
     static getCurrentUrlVideoId() : string {
         return this.getVideoIdFromUrl(location.href)
