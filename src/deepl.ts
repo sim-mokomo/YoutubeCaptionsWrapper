@@ -6,10 +6,6 @@ export class Deepl
 {
     config : DeeplConfig = new DeeplConfig()
 
-    constructor() {
-        void this.initialize()
-    }
-
     async initialize(){
         const repository = new ConfigsRepository()
         this.config = await repository.loadDeepLConfig()

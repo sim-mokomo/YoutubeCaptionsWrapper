@@ -4,7 +4,6 @@ import { ConfigsRepository } from "./configs-repository.js";
 export class Deepl {
     constructor() {
         this.config = new DeeplConfig();
-        void this.initialize();
     }
     async initialize() {
         const repository = new ConfigsRepository();

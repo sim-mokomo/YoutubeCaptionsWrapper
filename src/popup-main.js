@@ -72,6 +72,7 @@ async function createReplaceCaptions() {
     const videoId = await getCurrentPageVideoId(tab.id)
     // note: 日本語に変換する
     const deepL = new Deepl()
+    await deepL.initialize()
     const translatedCaptions = new CaptionList()
     for (const caption of captionList.captions) {
         deepL.translate(caption.text, "JA", translatedText => {
