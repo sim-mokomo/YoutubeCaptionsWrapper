@@ -23,8 +23,22 @@ console.log("initialize firebase")
 const translatedButton = document.getElementById("translated-by-deepL");
 if (translatedButton) {
     translatedButton.onclick = async () => {
+        const code =  `.ytp-caption-segment{
+            visibility: hidden;
+        }
+        
+        .ytp-deepl-caption-segment{
+            visibility: visible !important;
+        }
+        `
         const customChrome = new Chrome()
         const tab = await customChrome.getCurrentTabSync()
+        chrome.tabs.removeCSS(tab.id, {
+            code: code
+        })
+        chrome.tabs.insertCSS(tab.id, {
+            code: code
+        })
         const videoId = await getCurrentPageVideoId(tab.id)
         const captionsRepository = new TranslatedCaptionsRepository()
         const hasCaption = await captionsRepository.hasCaption(videoId)
