@@ -3,8 +3,7 @@ export class TranslatedCaptionsRepository {
     constructor() {
         this.db = firebase.firestore()
     }
-
-    // todo: jsonであることを意識しない実装にする
+    
     hasCaption(videoId, language){
         return new Promise(resolve => {
             this.db
