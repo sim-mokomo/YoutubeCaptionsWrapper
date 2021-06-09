@@ -41,7 +41,8 @@ if (translatedButton) {
         })
         const videoId = await getCurrentPageVideoId(tab.id)
         const captionsRepository = new TranslatedCaptionsRepository()
-        const hasCaption = await captionsRepository.hasCaption(videoId)
+        const captionLanguage = await getCaptionLanguageSync(tab.id)
+        const hasCaption = await captionsRepository.hasCaption(videoId, captionLanguage)
         if(hasCaption){
             // note: 字幕を取得
             void await requestReplaceCaptions()
@@ -51,6 +52,13 @@ if (translatedButton) {
             void await requestReplaceCaptions()
         }
     }
+}
+
+async function getCaptionLanguageSync(tabId) {
+    const response = await new Chrome().sendMessageSync(tabId, {
+        methodName: "requestCaptionLanguage"
+    })
+    return response.language
 }
 
 async function getCurrentPageVideoId(tabId) {
@@ -70,21 +78,26 @@ async function createReplaceCaptions() {
     Object.assign(captionList,JSON.parse(response.captionListJson))
 
     const videoId = await getCurrentPageVideoId(tab.id)
+    const captionLanguage = await getCaptionLanguageSync(tab.id)
     // note: 日本語に変換する
     const deepL = new Deepl()
     await deepL.initialize()
     const translatedCaptions = new CaptionList()
-    for (const caption of captionList.captions) {
-        deepL.translate(caption.text, "JA", translatedText => {
-            translatedCaptions.addList(new Caption(caption.renderSeconds, translatedText))
-            console.log(`${caption.renderSeconds} : ${caption.text}`)
-            if(translatedCaptions.captions.length == captionList.captions.length) {
-                translatedCaptions.captions.sort((x,y) => {return x.renderSeconds - y.renderSeconds})
-                console.log("completed translated")
-                new TranslatedCaptionsRepository().saveCaptionsJson(videoId, translatedCaptions)
-            }
-        })
-    }
+    await new Promise(resolve => {
+        for (const caption of captionList.captions) {
+            deepL.translate(caption.text, "JA", async translatedText => {
+                translatedCaptions.addList(new Caption(caption.renderSeconds, translatedText))
+                console.log(`${caption.renderSeconds} : ${caption.text}`)
+                if(translatedCaptions.captions.length == captionList.captions.length) {
+                    translatedCaptions.captions.sort((x,y) => {return x.renderSeconds - y.renderSeconds})
+                    console.log("completed translated")
+                    const captionRepository = new TranslatedCaptionsRepository()
+                    await captionRepository.saveCaptionsJson(videoId, captionLanguage , translatedCaptions)
+                    resolve()
+                }
+            })
+        }
+    })
 }
 
 async function requestReplaceCaptions() {
@@ -93,7 +106,8 @@ async function requestReplaceCaptions() {
     const videoId = await getCurrentPageVideoId(tab.id)
     console.log(`${videoId} で字幕を差し替え`)
 
-    const json = await new TranslatedCaptionsRepository().getCaptionsJson(videoId)
+    const captionLanguage = await getCaptionLanguageSync(tab.id)
+    const json = await new TranslatedCaptionsRepository().getCaptionsJson(videoId, captionLanguage)
     console.log(json)
     await customChrome.sendMessageSync(tab.id, {
         methodName: "sendReplaceCaptionsData",

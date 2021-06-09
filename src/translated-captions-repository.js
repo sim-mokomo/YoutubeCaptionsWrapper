@@ -1,5 +1,3 @@
-import {ConfigsRepository} from "./configs-repository.js";
-
 export class TranslatedCaptionsRepository {
 
     constructor() {
@@ -7,11 +5,13 @@ export class TranslatedCaptionsRepository {
     }
 
     // todo: jsonであることを意識しない実装にする
-    hasCaption(videoId){
+    hasCaption(videoId, language){
         return new Promise(resolve => {
             this.db
                 .collection("translated_captions")
                 .doc(videoId)
+                .collection("Languages")
+                .doc(language)
                 .get()
                 .then(x => {
                     resolve(x.exists)
@@ -19,11 +19,13 @@ export class TranslatedCaptionsRepository {
         })
     }
 
-    getCaptionsJson(videoId) {
+    getCaptionsJson(videoId, language) {
         return new Promise(resolve => {
             this.db
                 .collection("translated_captions")
                 .doc(videoId)
+                .collection("Languages")
+                .doc(language)
                 .get()
                 .then(x => {
                     resolve(x.data()["captions"])
@@ -31,16 +33,22 @@ export class TranslatedCaptionsRepository {
         })
     }
 
-    saveCaptionsJson(videoId, captionList){
-        this.db
-            .collection("translated_captions")
-            .doc(videoId)
-            .set({captions: JSON.stringify(captionList)})
-            .then(() => {
-                console.log("Document successfully written!");
-            })
-            .catch((error) => {
-                console.error("Error writing document: ", error);
-            })
+    saveCaptionsJson(videoId, language, captionList){
+        return new Promise(resolve => {
+            this.db
+                .collection("translated_captions")
+                .doc(videoId)
+                .collection("Languages")
+                .doc(language)
+                .set({captions: JSON.stringify(captionList)})
+                .then(() => {
+                    resolve()
+                    console.log("Document successfully written!");
+                })
+                .catch((error) => {
+                    resolve()
+                    console.error("Error writing document: ", error);
+                })
+        })
     }
 }
