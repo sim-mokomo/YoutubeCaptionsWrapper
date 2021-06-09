@@ -19,6 +19,8 @@ firebase.initializeApp({
 });
 
 console.log("initialize firebase")
+const progressBar = document.getElementById("upload-translated-caption-progress-bar")
+progressBar.value = 0
 
 const translatedButton = document.getElementById("translated-by-deepL");
 if (translatedButton) {
@@ -43,8 +45,10 @@ if (translatedButton) {
         const captionsRepository = new TranslatedCaptionsRepository()
         const captionLanguage = await getCaptionLanguageSync(tab.id)
         const hasCaption = await captionsRepository.hasCaption(videoId, captionLanguage)
+        progressBar.value = 0
         if(hasCaption){
             // note: 字幕を取得
+            progressBar.value = 100
             void await requestReplaceCaptions()
         }else{
             // note: 字幕を作る
@@ -95,6 +99,8 @@ async function createReplaceCaptions() {
                     await captionRepository.saveCaptionsJson(videoId, captionLanguage , translatedCaptions)
                     resolve()
                 }
+
+                progressBar.value = (translatedCaptions.captions.length / captionList.captions.length) * 100
             })
         }
     })

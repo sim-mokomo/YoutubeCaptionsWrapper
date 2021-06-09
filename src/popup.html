@@ -1,10 +1,26 @@
-<script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-firestore.js"></script>
-<script src="firebase-config.js" type="module"></script>
-<script src="deepl.js" type="module"></script>
-<script src="connection.js" type="module"></script>
-<script src="translated-captions-repository.js" type="module"></script>
-<script src="configs-repository.js" type="module"></script>
-<script src="popup-main.js" type="module"></script>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-firestore.js"></script>
+    <script src="firebase-config.js" type="module"></script>
+    <script src="deepl.js" type="module"></script>
+    <script src="connection.js" type="module"></script>
+    <script src="translated-captions-repository.js" type="module"></script>
+    <script src="configs-repository.js" type="module"></script>
+    <script src="popup-main.js" type="module"></script>
+</head>
+<body>
+    <button type="button", id="translated-by-deepL">convert</button>
 
-<button type="button", id="translated-by-deepL">convert</button>
+    <div id="upload-translated-caption-progress">
+        <label>upload progress:</label>
+        <progress id="upload-translated-caption-progress-bar" max="100" value="70"></progress>
+    </div>
+</body>
+</html>
