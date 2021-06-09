@@ -45,7 +45,6 @@ if (translatedButton) {
         const captionsRepository = new TranslatedCaptionsRepository()
         const captionLanguage = await getCaptionLanguageSync(tab.id)
         const hasCaption = await captionsRepository.hasCaption(videoId, captionLanguage)
-        progressBar.value = 0
         if(hasCaption){
             // note: 字幕を取得
             progressBar.value = 100

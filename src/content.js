@@ -13,7 +13,7 @@ void (async () => {
         }else if(message.methodName == "sendReplaceCaptionsData") {
             Object.assign(captionList, JSON.parse(message.captionListJson))
             captionList.addList(new CaptionModule.Caption(999999, ""));
-            sendResponse({})
+            return false
         }else if(message.methodName == "requestCurrentPageVideoId"){
             sendResponse(createCurrentPageVideoIdResponse())
         }else if(message.methodName == "requestCaptionLanguage"){
