@@ -2,7 +2,14 @@
 
 ## 概要
 
-Youtube字幕をDeepLで翻訳して表示させる
+Youtube字幕をDeepLで翻訳して表示させる.
+
+英語字幕を翻訳した結果は以下。
+
+上がDeepL翻訳
+下が自動翻訳
+
+<img width="543" alt="image" src="https://user-images.githubusercontent.com/15795655/121521807-716a5600-ca2f-11eb-8686-2515f47c561a.png">
 
 ## 手順
 
