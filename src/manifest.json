@@ -27,7 +27,10 @@
       "firebase-config.js",
       "chrome.js",
       "option.js",
-      "youtube.js"
+      "youtube.js",
+      "connections/contents-script/current-page-video-id-request.js",
+      "connections/request.js",
+      "connections/request-factory.js"
     ],
     "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'",
     "browser_action": {

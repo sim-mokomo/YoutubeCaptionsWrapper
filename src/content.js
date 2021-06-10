@@ -3,8 +3,7 @@
 void (async () => {
     const CaptionModule = await import(chrome.runtime.getURL("caption.js"));
     const CaptionListModule = await import(chrome.runtime.getURL("caption-list.js"));
-    const youtubeModule = await import(chrome.runtime.getURL("youtube.js"))
-
+    const RequestFactoryModule = await import(chrome.runtime.getURL("connections/request-factory.js"));
     let captionList = new CaptionListModule.CaptionList();
 
     chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
@@ -15,7 +14,14 @@ void (async () => {
             captionList.addList(new CaptionModule.Caption(999999, ""));
             return false
         }else if(message.methodName == "requestCurrentPageVideoId"){
-            sendResponse(createCurrentPageVideoIdResponse())
+            sendResponse(
+                new RequestFactoryModule.RequestFactory().create(
+                    new RequestFactoryModule.RequestFactoryRequest(
+                        RequestFactoryModule.RequestFactoryRequest.Type.CurrentPageVideoID,
+                        ""
+                    )
+                ).Response()
+            )
         }else if(message.methodName == "requestCaptionLanguage"){
             sendResponse(getCaptionLanguage())
         }
@@ -105,12 +111,6 @@ void (async () => {
         const captionDOM = document.getElementById("label-text")
         return {
             language: captionDOM.innerText
-        }
-    }
-
-    function createCurrentPageVideoIdResponse() {
-        return {
-            videoId: youtubeModule.Youtube.getCurrentUrlVideoId()
         }
     }
 
