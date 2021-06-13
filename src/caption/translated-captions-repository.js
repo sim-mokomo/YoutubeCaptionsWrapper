@@ -1,12 +1,9 @@
 import firebase from "firebase";
-
 export class TranslatedCaptionsRepository {
-
     constructor() {
-        this.db = firebase.firestore()
+        this.db = firebase.firestore();
     }
-    
-    hasCaption(videoId, language){
+    hasCaption(videoId, language) {
         return new Promise(resolve => {
             this.db
                 .collection("translated_captions")
@@ -15,11 +12,10 @@ export class TranslatedCaptionsRepository {
                 .doc(language)
                 .get()
                 .then(x => {
-                    resolve(x.exists)
-                })
-        })
+                resolve(x.exists);
+            });
+        });
     }
-
     getCaptionsJson(videoId, language) {
         return new Promise(resolve => {
             this.db
@@ -29,27 +25,30 @@ export class TranslatedCaptionsRepository {
                 .doc(language)
                 .get()
                 .then(x => {
-                    resolve(x.data()["captions"])
-                })
-        })
+                const data = x.data();
+                if (data == undefined) {
+                    return;
+                }
+                resolve(data["captions"]);
+            });
+        });
     }
-
-    saveCaptionsJson(videoId, language, captionList){
+    saveCaptionsJson(videoId, language, captionList) {
         return new Promise(resolve => {
             this.db
                 .collection("translated_captions")
                 .doc(videoId)
                 .collection("Languages")
                 .doc(language)
-                .set({captions: JSON.stringify(captionList)})
+                .set({ captions: JSON.stringify(captionList) })
                 .then(() => {
-                    resolve()
-                    console.log("Document successfully written!");
-                })
+                resolve();
+                console.log("Document successfully written!");
+            })
                 .catch((error) => {
-                    resolve()
-                    console.error("Error writing document: ", error);
-                })
-        })
+                resolve();
+                console.error("Error writing document: ", error);
+            });
+        });
     }
 }
