@@ -21,8 +21,7 @@ async function run() {
         measurementId: config.measurementId
     });
     console.log("initialize firebase");
-    const progressBar = getProgressBar();
-    progressBar.value = 0;
+    getProgressBar().value = 0;
     const translatedButton = document.getElementById("translated-by-deepL");
     if (translatedButton) {
         translatedButton.onclick = async () => {
@@ -37,7 +36,7 @@ async function run() {
             const hasCaption = await captionsRepository.hasCaption(videoId, captionLanguage);
             if (hasCaption) {
                 // note: 字幕を取得
-                progressBar.value = 100;
+                getProgressBar().value = 100;
                 void await requestReplaceCaptions();
             }
             else {
