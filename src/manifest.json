@@ -9,7 +9,7 @@
             "https://www.youtube.com/*"
           ],
           "js":[
-            "content-bundle.js"
+            "./bundles/content-bundle.js"
           ],
           "run_at": "document_end",
           "all_frames": true
@@ -17,7 +17,7 @@
       ],
     "manifest_version":2,
     "web_accessible_resources": [
-      "popup-bundle.js"
+      "./bundles/popup-bundle.js"
     ],
     "content_security_policy": "script-src 'self' https://apis.google.com 'unsafe-eval'; object-src 'self'",
     "browser_action": {
