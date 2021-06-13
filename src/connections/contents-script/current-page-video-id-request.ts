@@ -1,5 +1,5 @@
 import {IRequest} from "../request.js";
-import {Youtube} from "../../youtube.js";
+import {Youtube} from "../../utility/youtube.js";
 
 export class CurrentPageVideoIdRequest implements IRequest
 {

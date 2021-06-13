@@ -1,4 +1,4 @@
-import { Youtube } from "../../youtube.js";
+import { Youtube } from "../../utility/youtube.js";
 export class CurrentPageVideoIdRequest {
     constructor(parameterJson) {
     }

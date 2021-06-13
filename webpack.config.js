@@ -2,7 +2,7 @@ module.exports = {
     mode: 'development',
     devtool: "eval-source-map",
     entry: {
-        content: './src/content.js',
+        content: './src/content/content.js',
         popup: './src/popup/popup.js'
     },
     output: {

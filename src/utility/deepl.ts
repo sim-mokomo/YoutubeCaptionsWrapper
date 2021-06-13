@@ -1,6 +1,6 @@
-import {DeeplConfig} from "./deepl-config.js";
-import {Connection} from "./connection.js";
-import {ConfigsRepository} from "./configs-repository.js";
+import {DeeplConfig} from "../config/deepl-config.js";
+import {Connection} from "../connections/connection.js";
+import {ConfigsRepository} from "../config/configs-repository.js";
 
 export class Deepl
 {

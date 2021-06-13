@@ -1,8 +1,8 @@
 'use strict';
 
-import {CaptionList} from "./caption-list.js";
-import {RequestFactory, RequestFactoryRequest} from "./connections/request-factory.js";
-import {Caption} from "./caption.js";
+import {CaptionList} from "../caption/caption-list.js";
+import {RequestFactory, RequestFactoryRequest} from "../connections/request-factory.js";
+import {Caption} from "../caption/caption.js";
 
 void (async () => {
     let captionList = new CaptionList()
