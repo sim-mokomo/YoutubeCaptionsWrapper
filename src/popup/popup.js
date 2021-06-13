@@ -21,7 +21,7 @@ async function run() {
         measurementId: config.measurementId
     });
     console.log("initialize firebase");
-    const progressBar = document.getElementById("upload-translated-caption-progress-bar");
+    const progressBar = getProgressBar();
     progressBar.value = 0;
     const translatedButton = document.getElementById("translated-by-deepL");
     if (translatedButton) {
@@ -93,7 +93,7 @@ async function createReplaceCaptions() {
     // note: 日本語に変換する
     const deepL = new Deepl();
     await deepL.initialize();
-    const progressBar = document.getElementById("upload-translated-caption-progress-bar");
+    const progressBar = getProgressBar();
     const translatedCaptions = new CaptionList();
     await new Promise(resolve => {
         for (const caption of captionList.captions) {
@@ -130,4 +130,7 @@ async function requestReplaceCaptions() {
         methodName: CaptionListReceiver.requestMethodName,
         captionListJson: json
     });
+}
+function getProgressBar() {
+    return document.getElementById("upload-translated-caption-progress-bar");
 }

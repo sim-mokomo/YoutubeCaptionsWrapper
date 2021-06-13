@@ -24,7 +24,7 @@ async function run()
     });
 
     console.log("initialize firebase")
-    const progressBar = (<HTMLProgressElement>document.getElementById("upload-translated-caption-progress-bar"))
+    const progressBar = getProgressBar()
     progressBar.value = 0
 
     const translatedButton = document.getElementById("translated-by-deepL");
@@ -101,7 +101,7 @@ async function createReplaceCaptions() : Promise<void>{
     // note: 日本語に変換する
     const deepL = new Deepl()
     await deepL.initialize()
-    const progressBar = (<HTMLProgressElement>document.getElementById("upload-translated-caption-progress-bar"))
+    const progressBar = getProgressBar()
     const translatedCaptions = new CaptionList()
     await new Promise<void>(resolve => {
         for (const caption of captionList.captions) {
@@ -143,4 +143,8 @@ async function requestReplaceCaptions() {
         methodName: CaptionListReceiver.requestMethodName,
         captionListJson: json
     })
+}
+
+function getProgressBar() : HTMLProgressElement {
+    return (<HTMLProgressElement>document.getElementById("upload-translated-caption-progress-bar"))
 }
