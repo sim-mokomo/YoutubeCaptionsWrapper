@@ -30,27 +30,11 @@ async function run()
     const translatedButton = document.getElementById("translated-by-deepL");
     if (translatedButton) {
         translatedButton.onclick = async () => {
-            const code =  `.ytp-caption-segment{
-                visibility: hidden;
-            }
-            
-            .ytp-deepl-caption-segment{
-                visibility: visible !important;
-            }
-            `
-            const customChrome = new Chrome()
-            const tab = await customChrome.getCurrentTabSync()
+            const tab = await new Chrome().getCurrentTabSync()
             if(tab.id == null){
                 return
             }
-            // note: removeCSSが型定義ファイルに存在しない
-            // @ts-ignore
-            chrome.tabs.removeCSS(tab.id, {
-                code: code
-            })
-            chrome.tabs.insertCSS(tab.id, {
-                code: code
-            })
+            applyDeepLCaptionCSS(tab.id)
             const videoId = await getCurrentPageVideoId(tab.id)
             const captionsRepository = new TranslatedCaptionsRepository()
             const captionLanguage = await getCaptionLanguageSync(tab.id)
@@ -147,4 +131,24 @@ async function requestReplaceCaptions() {
 
 function getProgressBar() : HTMLProgressElement {
     return (<HTMLProgressElement>document.getElementById("upload-translated-caption-progress-bar"))
+}
+
+function applyDeepLCaptionCSS(tabId:number)  {
+    const code =
+        `.ytp-caption-segment{
+                visibility: hidden;
+            }
+            
+            .ytp-deepl-caption-segment{
+                visibility: visible !important;
+            }
+        `
+    // note: removeCSSが型定義ファイルに存在しない
+    // @ts-ignore
+    chrome.tabs.removeCSS(tabId, {
+        code: code
+    })
+    chrome.tabs.insertCSS(tabId, {
+        code: code
+    })
 }
