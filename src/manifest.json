@@ -25,5 +25,5 @@
       "default_title": "Whereami?",
       "default_popup": "popup.html"
     },
-    "options_page" : "option.html"
+    "options_page" : "./option/option.html"
 }

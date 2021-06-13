@@ -1,6 +1,6 @@
-import {DeeplConfig} from "./deepl-config.js";
-import {FirebaseConfig} from "./firebase-config.js";
-import {ConfigsRepository} from "./configs-repository.js";
+import {DeeplConfig} from "../deepl-config.js";
+import {FirebaseConfig} from "../firebase-config.js";
+import {ConfigsRepository} from "../configs-repository.js";
 
 const deeplAPIKeyInputDOM = (<HTMLInputElement>document.getElementById("deepl-key-input"))
 const firebaseAPIKeyInputDOM = (<HTMLInputElement>document.getElementById("firebase-apikey-input"))
