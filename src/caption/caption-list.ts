@@ -15,6 +15,10 @@ export class CaptionList {
         return this.captions.length <= 0
     }
 
+    length() :number{
+        return this.captions.length
+    }
+
     findCaptionBySeconds(seconds:number) : Caption{
         const caption = this.captions.find(x => x.renderSeconds == seconds)
         if(caption == null){

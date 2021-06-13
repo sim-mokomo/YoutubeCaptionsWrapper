@@ -1,6 +1,6 @@
 import { DeeplConfig } from "../config/deepl-config.js";
-import { Connection } from "../connections/connection.js";
 import { ConfigsRepository } from "../config/configs-repository.js";
+import { Connection } from "./connection";
 export class Deepl {
     constructor() {
         this.config = new DeeplConfig();

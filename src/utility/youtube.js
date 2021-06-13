@@ -10,4 +10,9 @@ export class Youtube {
         }
         return videoId;
     }
+    static getCurrentCaptionLanguage() {
+        const captionLanguageDOM = document.getElementById("label-text");
+        const language = captionLanguageDOM != null ? captionLanguageDOM.innerText : "";
+        return language;
+    }
 }
