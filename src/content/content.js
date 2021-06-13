@@ -17,7 +17,8 @@ async function run() {
             sendResponse(request?.Response());
         }
         else if (message.methodName == "requestCaptionLanguage") {
-            sendResponse(getCaptionLanguage());
+            const request = new RequestFactory().create(new RequestFactoryRequest(RequestFactoryRequest.Type.CurrentCaptionLanguageRequest, ""));
+            sendResponse(request?.Response());
         }
         return true;
     });
@@ -85,14 +86,6 @@ async function run() {
             }
         }
         return { captionListJson: JSON.stringify(captions) };
-    }
-    function getCaptionLanguage() {
-        const captionDOM = document.getElementById("label-text");
-        return {
-            language: captionDOM != null ?
-                captionDOM.innerText :
-                ""
-        };
     }
     console.log("initialize content script");
 }
