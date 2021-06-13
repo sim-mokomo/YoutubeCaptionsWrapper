@@ -1,30 +1,36 @@
-import { CaptionList } from "../caption/caption-list.js";
-import { RequestFactory, RequestFactoryRequest } from "../connections/request-factory.js";
-import { Caption } from "../caption/caption.js";
+import {CaptionList} from "../caption/caption-list.js";
+import {RequestFactory, RequestFactoryRequest} from "../connections/request-factory.js";
+import {Caption} from "../caption/caption.js";
+
 async function run() {
-    let captionList = new CaptionList();
+    let captionList = new CaptionList()
+
     chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-        if (message.methodName == "requestCurrentPageCaptionList") {
+        if(message.methodName == "requestCurrentPageCaptionList"){
             sendResponse(createTranslatedCaptions());
-        }
-        else if (message.methodName == "sendReplaceCaptionsData") {
-            Object.assign(captionList, JSON.parse(message.captionListJson));
+        }else if(message.methodName == "sendReplaceCaptionsData") {
+            Object.assign(captionList, JSON.parse(message.captionListJson))
             captionList.addList(new Caption(999999, ""));
-            return false;
-        }
-        else if (message.methodName == "requestCurrentPageVideoId") {
-            const request = new RequestFactory().create(new RequestFactoryRequest(RequestFactoryRequest.Type.CurrentPageVideoID, ""));
-            sendResponse(request?.Response());
-        }
-        else if (message.methodName == "requestCaptionLanguage") {
-            sendResponse(getCaptionLanguage());
+            return false
+        }else if(message.methodName == "requestCurrentPageVideoId"){
+            const request = new RequestFactory().create(
+                new RequestFactoryRequest(
+                    RequestFactoryRequest.Type.CurrentPageVideoID,
+                    ""
+                )
+            )
+            sendResponse(request?.Response())
+        }else if(message.methodName == "requestCaptionLanguage"){
+            sendResponse(getCaptionLanguage())
         }
         return true;
     });
+
     const videos = document.getElementsByTagName("video");
     if (videos.length <= 0) {
         return;
     }
+
     const video = videos[0];
     video.ontimeupdate = (event) => {
         const captionWindows = document.getElementsByClassName("caption-window");
@@ -42,7 +48,7 @@ async function run() {
             return;
         }
         const targetCaption = new Caption(0, "");
-        Object.assign(targetCaption, captionList.findCaptionBySeconds(seconds));
+        Object.assign(targetCaption, captionList.findCaptionBySeconds(seconds))
         const translatedTexts = targetCaption.getMoldingText();
         const captions = document.getElementsByClassName("ytp-caption-segment");
         for (let i = 0; i < captions.length; i++) {
@@ -66,34 +72,49 @@ async function run() {
             }
         }
     };
+
     function createTranslatedCaptions() {
         const body = document.getElementById("body");
         if (body == null) {
             return;
         }
+
         // note: 表示されている文字起こしを変換用の字幕に変換
         const captionContainer = body.getElementsByClassName("ytd-transcript-renderer")[0];
-        const captions = new CaptionList();
+        const captions = new CaptionList()
         for (const caption of captionContainer.children) {
             if (caption.children[0].innerHTML) {
-                captions.addList(new Caption(Caption.parseSecondsString(caption
-                    .children[0]
-                    .innerHTML), Caption.parseCaptionString(caption
-                    .children[1]
-                    .getElementsByClassName("cue ytd-transcript-body-renderer")[0]
-                    .innerHTML)));
+                captions.addList(
+                    new Caption(
+                        Caption.parseSecondsString(
+                            caption
+                                .children[0]
+                                .innerHTML
+                        ),
+                        Caption.parseCaptionString(
+                            caption
+                                .children[1]
+                                .getElementsByClassName("cue ytd-transcript-body-renderer")[0]
+                                .innerHTML
+                        )
+                    )
+                )
             }
         }
-        return { captionListJson: JSON.stringify(captions) };
+
+        return { captionListJson: JSON.stringify(captions) }
     }
+
     function getCaptionLanguage() {
-        const captionDOM = document.getElementById("label-text");
+        const captionDOM = document.getElementById("label-text")
         return {
             language: captionDOM != null ?
                 captionDOM.innerText :
                 ""
-        };
+        }
     }
-    console.log("initialize content script");
+
+    console.log("initialize content script")
 }
-void run();
+
+void run()
