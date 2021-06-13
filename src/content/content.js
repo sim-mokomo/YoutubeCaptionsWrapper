@@ -5,7 +5,8 @@ async function run() {
     let captionList = new CaptionList();
     chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         if (message.methodName == "requestCurrentPageCaptionList") {
-            sendResponse(createTranslatedCaptions());
+            const request = new RequestFactory().create(new RequestFactoryRequest(RequestFactoryRequest.Type.CurrentCaptionListRequest, ""));
+            sendResponse(request?.Response());
         }
         else if (message.methodName == "sendReplaceCaptionsData") {
             Object.assign(captionList, JSON.parse(message.captionListJson));
@@ -67,26 +68,6 @@ async function run() {
             }
         }
     };
-    function createTranslatedCaptions() {
-        const body = document.getElementById("body");
-        if (body == null) {
-            return;
-        }
-        // note: 表示されている文字起こしを変換用の字幕に変換
-        const captionContainer = body.getElementsByClassName("ytd-transcript-renderer")[0];
-        const captions = new CaptionList();
-        for (const caption of captionContainer.children) {
-            if (caption.children[0].innerHTML) {
-                captions.addList(new Caption(Caption.parseSecondsString(caption
-                    .children[0]
-                    .innerHTML), Caption.parseCaptionString(caption
-                    .children[1]
-                    .getElementsByClassName("cue ytd-transcript-body-renderer")[0]
-                    .innerHTML)));
-            }
-        }
-        return { captionListJson: JSON.stringify(captions) };
-    }
     console.log("initialize content script");
 }
 void run();

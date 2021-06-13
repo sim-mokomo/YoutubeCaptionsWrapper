@@ -10,6 +10,8 @@ export class RequestFactory
                 return new CurrentPageVideoIdRequest(request.parameterJson)
             case RequestFactoryRequest.Type.CurrentCaptionLanguageRequest:
                 return new CurrentCaptionLanguageRequest(request.parameterJson)
+            case RequestFactoryRequest.Type.CurrentCaptionListRequest:
+                return new CurrentCaptionLanguageRequest(request.parameterJson)
             default:
                 return null
         }
@@ -29,5 +31,6 @@ export class RequestFactoryRequest
     public static Type = class extends RequestFactoryRequest {
         static CurrentPageVideoID = "requestCurrentPageVideoId"
         static CurrentCaptionLanguageRequest = "requestCaptionLanguage"
+        static CurrentCaptionListRequest = "requestCurrentPageCaptionList"
     }
 }
