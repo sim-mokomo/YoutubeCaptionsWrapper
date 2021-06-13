@@ -4,58 +4,64 @@ import {Caption} from "./caption.js";
 import {Chrome} from "./chrome.js"
 import {TranslatedCaptionsRepository} from "./translated-captions-repository.js";
 import {ConfigsRepository} from "./configs-repository.js";
+import firebase from "firebase"
 
-const configRepository = new ConfigsRepository()
-console.log("initializing firebase")
-const config = await configRepository.loadFirebaseConfig()
-firebase.initializeApp({
-    apiKey: config.apiKey,
-    authDomain: config.authDomain,
-    projectId: config.projectId,
-    storageBucket: config.storageBucket,
-    messagingSenderId: config.messagingSenderId,
-    appId: config.appId,
-    measurementId: config.measurementId
-});
+async function run()
+{
+    const configRepository = new ConfigsRepository()
+    console.log("initializing firebase")
+    const config = await configRepository.loadFirebaseConfig()
+    firebase.initializeApp({
+        apiKey: config.apiKey,
+        authDomain: config.authDomain,
+        projectId: config.projectId,
+        storageBucket: config.storageBucket,
+        messagingSenderId: config.messagingSenderId,
+        appId: config.appId,
+        measurementId: config.measurementId
+    });
 
-console.log("initialize firebase")
-const progressBar = document.getElementById("upload-translated-caption-progress-bar")
-progressBar.value = 0
+    console.log("initialize firebase")
+    const progressBar = document.getElementById("upload-translated-caption-progress-bar")
+    progressBar.value = 0
 
-const translatedButton = document.getElementById("translated-by-deepL");
-if (translatedButton) {
-    translatedButton.onclick = async () => {
-        const code =  `.ytp-caption-segment{
-            visibility: hidden;
-        }
-        
-        .ytp-deepl-caption-segment{
-            visibility: visible !important;
-        }
-        `
-        const customChrome = new Chrome()
-        const tab = await customChrome.getCurrentTabSync()
-        chrome.tabs.removeCSS(tab.id, {
-            code: code
-        })
-        chrome.tabs.insertCSS(tab.id, {
-            code: code
-        })
-        const videoId = await getCurrentPageVideoId(tab.id)
-        const captionsRepository = new TranslatedCaptionsRepository()
-        const captionLanguage = await getCaptionLanguageSync(tab.id)
-        const hasCaption = await captionsRepository.hasCaption(videoId, captionLanguage)
-        if(hasCaption){
-            // note: 字幕を取得
-            progressBar.value = 100
-            void await requestReplaceCaptions()
-        }else{
-            // note: 字幕を作る
-            void await createReplaceCaptions()
-            void await requestReplaceCaptions()
+    const translatedButton = document.getElementById("translated-by-deepL");
+    if (translatedButton) {
+        translatedButton.onclick = async () => {
+            const code =  `.ytp-caption-segment{
+                visibility: hidden;
+            }
+            
+            .ytp-deepl-caption-segment{
+                visibility: visible !important;
+            }
+            `
+            const customChrome = new Chrome()
+            const tab = await customChrome.getCurrentTabSync()
+            chrome.tabs.removeCSS(tab.id, {
+                code: code
+            })
+            chrome.tabs.insertCSS(tab.id, {
+                code: code
+            })
+            const videoId = await getCurrentPageVideoId(tab.id)
+            const captionsRepository = new TranslatedCaptionsRepository()
+            const captionLanguage = await getCaptionLanguageSync(tab.id)
+            const hasCaption = await captionsRepository.hasCaption(videoId, captionLanguage)
+            if(hasCaption){
+                // note: 字幕を取得
+                progressBar.value = 100
+                void await requestReplaceCaptions()
+            }else{
+                // note: 字幕を作る
+                void await createReplaceCaptions()
+                void await requestReplaceCaptions()
+            }
         }
     }
 }
+
+void run()
 
 async function getCaptionLanguageSync(tabId) {
     const response = await new Chrome().sendMessageSync(tabId, {
@@ -85,6 +91,7 @@ async function createReplaceCaptions() {
     // note: 日本語に変換する
     const deepL = new Deepl()
     await deepL.initialize()
+    const progressBar = document.getElementById("upload-translated-caption-progress-bar")
     const translatedCaptions = new CaptionList()
     await new Promise(resolve => {
         for (const caption of captionList.captions) {

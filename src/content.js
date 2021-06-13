@@ -1,23 +1,24 @@
 'use strict';
 
+import {CaptionList} from "./caption-list.js";
+import {RequestFactory, RequestFactoryRequest} from "./connections/request-factory.js";
+import {Caption} from "./caption.js";
+
 void (async () => {
-    const CaptionModule = await import(chrome.runtime.getURL("caption.js"));
-    const CaptionListModule = await import(chrome.runtime.getURL("caption-list.js"));
-    const RequestFactoryModule = await import(chrome.runtime.getURL("connections/request-factory.js"));
-    let captionList = new CaptionListModule.CaptionList();
+    let captionList = new CaptionList()
 
     chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         if(message.methodName == "requestCurrentPageCaptionList"){
             sendResponse(createTranslatedCaptions());
         }else if(message.methodName == "sendReplaceCaptionsData") {
             Object.assign(captionList, JSON.parse(message.captionListJson))
-            captionList.addList(new CaptionModule.Caption(999999, ""));
+            captionList.addList(new Caption(999999, ""));
             return false
         }else if(message.methodName == "requestCurrentPageVideoId"){
             sendResponse(
-                new RequestFactoryModule.RequestFactory().create(
-                    new RequestFactoryModule.RequestFactoryRequest(
-                        RequestFactoryModule.RequestFactoryRequest.Type.CurrentPageVideoID,
+                new RequestFactory().create(
+                    new RequestFactoryRequest(
+                        RequestFactoryRequest.Type.CurrentPageVideoID,
                         ""
                     )
                 ).Response()
@@ -49,7 +50,7 @@ void (async () => {
         if (captionList.empty()) {
             return;
         }
-        const targetCaption = new CaptionModule.Caption(0, "");
+        const targetCaption = new Caption(0, "");
         Object.assign(targetCaption, captionList.findCaptionBySeconds(seconds))
         const translatedTexts = targetCaption.getMoldingText();
         const captions = document.getElementsByClassName("ytp-caption-segment");
@@ -83,17 +84,17 @@ void (async () => {
 
         // note: 表示されている文字起こしを変換用の字幕に変換
         const captionContainer = body.getElementsByClassName("ytd-transcript-renderer")[0];
-        const captions = new CaptionListModule.CaptionList()
+        const captions = new CaptionList()
         for (const caption of captionContainer.children) {
             if (caption.children[0].innerHTML) {
                 captions.addList(
-                    new CaptionModule.Caption(
-                        CaptionModule.Caption.parseSecondsString(
+                    new Caption(
+                        Caption.parseSecondsString(
                             caption
                                 .children[0]
                                 .innerHTML
                         ),
-                        CaptionModule.Caption.parseCaptionString(
+                        Caption.parseCaptionString(
                             caption
                                 .children[1]
                                 .getElementsByClassName("cue ytd-transcript-body-renderer")[0]

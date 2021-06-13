@@ -9,7 +9,7 @@
             "https://www.youtube.com/*"
           ],
           "js":[
-            "content.js"
+            "content-bundle.js"
           ],
           "run_at": "document_end",
           "all_frames": true
@@ -17,22 +17,9 @@
       ],
     "manifest_version":2,
     "web_accessible_resources": [
-      "caption.js",
-      "caption-list.js",
-      "connection.js",
-      "deepl-config.js",
-      "deepl.js",
-      "popup.html",
-      "popup-main.js",
-      "firebase-config.js",
-      "chrome.js",
-      "option.js",
-      "youtube.js",
-      "connections/contents-script/current-page-video-id-request.js",
-      "connections/request.js",
-      "connections/request-factory.js"
+      "popup-bundle.js"
     ],
-    "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'",
+    "content_security_policy": "script-src 'self' https://apis.google.com 'unsafe-eval'; object-src 'self'",
     "browser_action": {
       "browser_style": true,
       "default_title": "Whereami?",
