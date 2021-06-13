@@ -1,6 +1,7 @@
 import {IRequest} from "./request.js";
 import {CurrentPageVideoIdRequest} from "./contents-script/current-page-video-id-request.js";
 import {CurrentCaptionLanguageRequest} from "./contents-script/current-caption-language-request";
+import {CurrentCaptionListRequest} from "./contents-script/current-caption-list-request";
 
 export class RequestFactory
 {
@@ -11,7 +12,7 @@ export class RequestFactory
             case RequestFactoryRequest.Type.CurrentCaptionLanguageRequest:
                 return new CurrentCaptionLanguageRequest(request.parameterJson)
             case RequestFactoryRequest.Type.CurrentCaptionListRequest:
-                return new CurrentCaptionLanguageRequest(request.parameterJson)
+                return new CurrentCaptionListRequest(request.parameterJson)
             default:
                 return null
         }
