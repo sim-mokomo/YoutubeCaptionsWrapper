@@ -3,7 +3,7 @@ module.exports = {
     devtool: "eval-source-map",
     entry: {
         content: './src/content.js',
-        popup: './src/popup-main.js'
+        popup: './src/popup/popup.js'
     },
     output: {
         filename: '[name]-bundle.js',

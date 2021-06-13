@@ -1,9 +1,9 @@
-import { Deepl } from "./deepl.js";
-import {CaptionList} from "./caption-list.js";
-import {Caption} from "./caption.js";
-import {Chrome} from "./chrome.js"
-import {TranslatedCaptionsRepository} from "./translated-captions-repository.js";
-import {ConfigsRepository} from "./configs-repository.js";
+import { Deepl } from "../deepl.js";
+import {CaptionList} from "../caption-list.js";
+import {Caption} from "../caption.js";
+import {Chrome} from "../chrome.js"
+import {TranslatedCaptionsRepository} from "../translated-captions-repository.js";
+import {ConfigsRepository} from "../configs-repository.js";
 import firebase from "firebase"
 
 async function run()

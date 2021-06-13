@@ -23,7 +23,7 @@
     "browser_action": {
       "browser_style": true,
       "default_title": "Whereami?",
-      "default_popup": "popup.html"
+      "default_popup": "./popup/popup.html"
     },
     "options_page" : "./option/option.html"
 }
