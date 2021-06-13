@@ -5,6 +5,8 @@ import {Chrome} from "../utility/chrome.js"
 import {TranslatedCaptionsRepository} from "../caption/translated-captions-repository.js";
 import {ConfigsRepository} from "../config/configs-repository.js";
 import firebase from "firebase"
+import {RequestFactoryRequest} from "../connections/request-factory.js";
+import {CaptionListReceiver} from "../connections/contents-script/caption-list-receiver.js";
 
 async function run()
 {
@@ -70,14 +72,14 @@ void run()
 
 async function getCaptionLanguageSync(tabId: number) : Promise<string> {
     const response = await new Chrome().sendMessageSync(tabId, {
-        methodName: "requestCaptionLanguage"
+        methodName: RequestFactoryRequest.Type.CurrentCaptionLanguageRequest
     })
     return response.language
 }
 
 async function getCurrentPageVideoId(tabId:number) : Promise<string> {
     const response = await new Chrome().sendMessageSync(tabId, {
-        methodName: "requestCurrentPageVideoId"
+        methodName: RequestFactoryRequest.Type.CurrentPageVideoID
     })
     return response.videoId
 }
@@ -89,7 +91,7 @@ async function createReplaceCaptions() : Promise<void>{
         return
     }
     const response = await customChrome.sendMessageSync(tab.id, {
-        methodName: "requestCurrentPageCaptionList"
+        methodName: RequestFactoryRequest.Type.CurrentCaptionListRequest
     })
     const captionList = new CaptionList()
     Object.assign(captionList,JSON.parse(response.captionListJson))
@@ -138,7 +140,7 @@ async function requestReplaceCaptions() {
     }
 
     await customChrome.sendMessageSync(tab.id, {
-        methodName: "sendReplaceCaptionsData",
+        methodName: CaptionListReceiver.requestMethodName,
         captionListJson: json
     })
 }

@@ -1,27 +1,24 @@
 import { CaptionList } from "../caption/caption-list.js";
 import { RequestFactory, RequestFactoryRequest } from "../connections/request-factory.js";
 import { Caption } from "../caption/caption.js";
+import { CaptionListReceiver } from "../connections/contents-script/caption-list-receiver.js";
 async function run() {
     let captionList = new CaptionList();
     chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-        if (message.methodName == "requestCurrentPageCaptionList") {
-            const request = new RequestFactory().create(new RequestFactoryRequest(RequestFactoryRequest.Type.CurrentCaptionListRequest, ""));
-            sendResponse(request?.Response());
+        // note: req/res処理
+        const request = new RequestFactory().create(new RequestFactoryRequest(message.methodName, ""));
+        if (request != null) {
+            sendResponse(request.Response());
+            return true;
         }
-        else if (message.methodName == "sendReplaceCaptionsData") {
-            Object.assign(captionList, JSON.parse(message.captionListJson));
-            captionList.addList(new Caption(999999, ""));
-            return false;
+        // note: receive 処理
+        // todo: req/resと統合
+        if (message.methodName == CaptionListReceiver.requestMethodName) {
+            new CaptionListReceiver(receiveCaptionList => {
+                captionList = receiveCaptionList;
+            }).receive(message.captionListJson);
         }
-        else if (message.methodName == "requestCurrentPageVideoId") {
-            const request = new RequestFactory().create(new RequestFactoryRequest(RequestFactoryRequest.Type.CurrentPageVideoID, ""));
-            sendResponse(request?.Response());
-        }
-        else if (message.methodName == "requestCaptionLanguage") {
-            const request = new RequestFactory().create(new RequestFactoryRequest(RequestFactoryRequest.Type.CurrentCaptionLanguageRequest, ""));
-            sendResponse(request?.Response());
-        }
-        return true;
+        return false;
     });
     const videos = document.getElementsByTagName("video");
     if (videos.length <= 0) {
