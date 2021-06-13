@@ -74,24 +74,28 @@ async function createReplaceCaptions() {
     Object.assign(captionList, JSON.parse(response.captionListJson));
     const videoId = await getCurrentPageVideoId(tab.id);
     const captionLanguage = await getCaptionLanguageSync(tab.id);
-    // note: 日本語に変換する
+    const progressBar = getProgressBar();
+    await translateCaptionProcess(captionList, videoId, captionLanguage, translatedCaptions => {
+        progressBar.value = (translatedCaptions.captions.length / captionList.captions.length) * 100;
+    });
+}
+async function translateCaptionProcess(originCaptionList, videoId, originLanguage, perTranslateCallback) {
     const deepL = new Deepl();
     await deepL.initialize();
-    const progressBar = getProgressBar();
     const translatedCaptions = new CaptionList();
-    await new Promise(resolve => {
-        for (const caption of captionList.captions) {
+    return new Promise(resolve => {
+        for (const caption of originCaptionList.captions) {
             deepL.translate(caption.text, "JA", async (translatedText) => {
                 translatedCaptions.addList(new Caption(caption.renderSeconds, translatedText));
                 console.log(`${caption.renderSeconds} : ${caption.text}`);
-                if (translatedCaptions.captions.length == captionList.captions.length) {
+                if (translatedCaptions.captions.length == originCaptionList.captions.length) {
                     translatedCaptions.captions.sort((x, y) => { return x.renderSeconds - y.renderSeconds; });
                     console.log("completed translated");
                     const captionRepository = new TranslatedCaptionsRepository();
-                    await captionRepository.saveCaptionsJson(videoId, captionLanguage, translatedCaptions);
+                    await captionRepository.saveCaptionsJson(videoId, originLanguage, translatedCaptions);
                     resolve();
                 }
-                progressBar.value = (translatedCaptions.captions.length / captionList.captions.length) * 100;
+                perTranslateCallback(translatedCaptions);
             });
         }
     });
