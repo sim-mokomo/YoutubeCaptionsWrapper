@@ -17,8 +17,8 @@ test('empty', () => {
 
 test('findCaptionBySeconds', ()=>{
     const captionList = new CaptionList()
-    captionList.addList(new Caption(15, 'test2'))
     captionList.addList(new Caption(10, 'test1'))
+    captionList.addList(new Caption(15, 'test2'))
 
     {
         const caption = captionList.findCaptionBySeconds(10)

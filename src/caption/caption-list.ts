@@ -20,7 +20,7 @@ export class CaptionList {
     }
 
     findCaptionBySeconds(seconds:number) : Caption{
-        const caption = this.captions.find(x => x.renderSeconds == seconds)
+        const caption = this.captions.find(x => seconds <= x.renderSeconds)
         if(caption == null){
             const nearMaxSecondsCaptionIndex = this.captions.findIndex(x => x.renderSeconds >= seconds)
             return this.captions[nearMaxSecondsCaptionIndex - 1]
