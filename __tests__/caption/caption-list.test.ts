@@ -46,13 +46,13 @@ test('combinePerPeriod', ()=> {
         const combinedCaptionList = captionList.combinePerPeriod()
         expect(combinedCaptionList.captions[0].renderSeconds).toBe(9)
         expect(combinedCaptionList.captions[0].text).toBe(
-            '[MUSIC]\n' +
-            '&gt;&gt; Kubernetes was founded almost seven years ago my guess,\n' +
-            'depending on when you start the clock when it\n' +
+            '[MUSIC] ' +
+            '>> Kubernetes was founded almost seven years ago my guess, ' +
+            'depending on when you start the clock when it ' +
             'publicly released or when development started.')
         expect(combinedCaptionList.captions[1].renderSeconds).toBe(14)
         expect(combinedCaptionList.captions[1].text).toBe(
-            'It was the three of us,\nJoe Beda, Craig McLuckie, and myself.'
+            'It was the three of us, Joe Beda, Craig McLuckie, and myself.'
         )
     }
 
@@ -68,13 +68,13 @@ test('combinePerPeriod', ()=> {
         const combinedCaptionList = captionList.combinePerPeriod()
         expect(combinedCaptionList.captions[0].renderSeconds).toBe(9)
         expect(combinedCaptionList.captions[0].text).toBe(
-            '[MUSIC]\n' +
-            '&gt;&gt; Kubernetes was founded almost seven years ago my guess,\n' +
-            'depending on when you start the clock when it\n' +
+            '[MUSIC] ' +
+            '>> Kubernetes was founded almost seven years ago my guess, ' +
+            'depending on when you start the clock when it ' +
             'publicly released or when development started.')
         expect(combinedCaptionList.captions[1].renderSeconds).toBe(14)
         expect(combinedCaptionList.captions[1].text).toBe(
-            'It was the three of us,\nJoe Beda, Craig McLuckie, and myself'
+            'It was the three of us, Joe Beda, Craig McLuckie, and myself'
         )
     }
 })

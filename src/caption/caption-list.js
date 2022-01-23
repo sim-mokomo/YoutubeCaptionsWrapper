@@ -34,7 +34,7 @@ export class CaptionList {
                 caption = new Caption(0, '');
             }
             else {
-                caption.text += '\n';
+                caption.text += ' ';
             }
         });
         return combineCaptionList;
