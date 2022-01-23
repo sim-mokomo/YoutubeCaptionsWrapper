@@ -62,7 +62,8 @@ async function run() {
         const targetCaption = new Caption(0, "");
         Object.assign(targetCaption, captionList.findCaptionBySeconds(seconds))
         const captions = document.getElementsByClassName("ytp-caption-segment");
-        const captionRowNum = captions.length
+        // note: 自動でフォントサイズと改行をしてくれるので常に1行指定
+        const captionRowNum = 1
         const translatedTexts = targetCaption.getMoldingText(captionRowNum);
         for (let i = 0; i < captionRowNum; i++) {
             const caption = captions[i];
