@@ -1,4 +1,4 @@
-import {Youtube} from "../../utility/youtube";
+import {Youtube} from "../../src/utility/youtube";
 
 test('getVideoIdFromUrl:単発動画URLからビデオIDを取得', () => {
     expect(Youtube.getVideoIdFromUrl('https://www.youtube.com/watch?v=Z4kkTI4OFqs'))

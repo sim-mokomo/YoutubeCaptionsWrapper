@@ -1,4 +1,4 @@
-import {Caption} from "../../caption/caption";
+import {Caption} from "../../src/caption/caption";
 
 test('getMoldingText:42文字以上の文字列が分割されているかどうか', ()=>{
     const caption = new Caption(10, "01234567890123456789012345678901234567890123456789")

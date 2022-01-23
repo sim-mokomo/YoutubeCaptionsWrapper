@@ -1,5 +1,5 @@
-import {CaptionList} from "../../caption/caption-list";
-import {Caption} from "../../caption/caption";
+import {CaptionList} from "../../src/caption/caption-list";
+import {Caption} from "../../src/caption/caption";
 
 test('addList', () => {
     const captionList = new CaptionList()
