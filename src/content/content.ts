@@ -9,7 +9,7 @@ import {Chrome} from "../utility/chrome";
 async function run() {
     await Utility.Firebase.initialize()
 
-    let captionList = new CaptionList()
+    const captionList = new CaptionList()
     chrome.runtime.onMessage.addListener(async function (message, sender, sendResponse) {
         if(message.methodName == "onNotifyConvert"){
             const videoId = Youtube.getCurrentUrlVideoId()
@@ -19,7 +19,13 @@ async function run() {
                 await replaceByJapaneseCaption(Youtube.getCaptionLanguageFromDocument(document))
                 notifyUpdateTranslatedProgress(100)
             }else{
-                const currentCaptionList = getCurrentCaptionList()
+                const isEnglish = captionLanguage == '英語'
+                const currentCaptionList = isEnglish ?
+                    getCurrentCaptionList().combinePerPeriod() :
+                    getCurrentCaptionList()
+                currentCaptionList.captions.forEach(x => {
+                    console.log(`${x.renderSeconds} ${x.text}`)
+                })
                 const japaneseCaptionList = await createTranslatedCaptionList(currentCaptionList,
                         translatedCaptionList => {
                     const progress = (translatedCaptionList.length() / currentCaptionList.length()) * 100
