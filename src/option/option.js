@@ -9,7 +9,7 @@ const storageBucketInputDOM = document.getElementById("storage-bucket-input");
 const messagingSenderIDInputDOM = document.getElementById("messaging-sender-id-input");
 const appIDInputDOM = document.getElementById("app-id-input");
 const measurementIDInputDOM = document.getElementById("measurement-id-input");
-function save_options() {
+function saveOptions() {
     const deepLConfig = new DeeplConfig();
     deepLConfig.deepLAPIKey = deeplAPIKeyInputDOM.value;
     const firebaseConfig = new FirebaseConfig();
@@ -27,7 +27,7 @@ function save_options() {
         console.log("save configs");
     });
 }
-async function restore_options() {
+async function loadOptions() {
     const repository = new ConfigsRepository();
     const deepLConfig = await repository.loadDeepLConfig();
     const firebaseConfig = await repository.loadFirebaseConfig();
@@ -46,8 +46,8 @@ function applyFirebaseConfigView(config) {
     appIDInputDOM.value = config.appId;
     measurementIDInputDOM.value = config.measurementId;
 }
-document.addEventListener('DOMContentLoaded', restore_options);
+document.addEventListener('DOMContentLoaded', loadOptions);
 const saveButtonDOM = document.getElementById("save");
 if (saveButtonDOM) {
-    saveButtonDOM.addEventListener("click", save_options);
+    saveButtonDOM.addEventListener("click", saveOptions);
 }
