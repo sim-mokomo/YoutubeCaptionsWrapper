@@ -1,12 +1,31 @@
 export class Caption {
     constructor(renderSeconds, text) {
         this.renderSeconds = renderSeconds;
-        this.text = text;
+        this.text = Caption.decodeEntityReferenceCode(text);
     }
-    getMoldingText() {
+    static decodeEntityReferenceCode(text) {
+        class EntityReferenceCode {
+            constructor(reference, text) {
+                this.reference = reference;
+                this.text = text;
+            }
+        }
+        const entityReferenceCodeList = [
+            new EntityReferenceCode("&lt;", "<"),
+            new EntityReferenceCode("&gt;", ">"),
+            new EntityReferenceCode("&amp;", "&"),
+            new EntityReferenceCode("&quot;", '"')
+        ];
+        entityReferenceCodeList.forEach(x => {
+            const regex = new RegExp(x.reference, 'g');
+            text = text.replace(regex, x.text);
+        });
+        return text;
+    }
+    getMoldingText(rowNum) {
         const ret = [];
-        const maximumCharacterCountInRow = 42;
-        for (let i = 0; i < this.text.length / maximumCharacterCountInRow; i++) {
+        const maximumCharacterCountInRow = this.text.length / rowNum;
+        for (let i = 0; i < rowNum; i++) {
             ret.push(this.text.substr(i * maximumCharacterCountInRow, maximumCharacterCountInRow));
         }
         return ret;

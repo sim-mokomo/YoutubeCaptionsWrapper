@@ -50,9 +50,10 @@ async function run() {
         }
         const targetCaption = new Caption(0, "");
         Object.assign(targetCaption, captionList.findCaptionBySeconds(seconds));
-        const translatedTexts = targetCaption.getMoldingText();
         const captions = document.getElementsByClassName("ytp-caption-segment");
-        for (let i = 0; i < captions.length; i++) {
+        const captionRowNum = captions.length;
+        const translatedTexts = targetCaption.getMoldingText(captionRowNum);
+        for (let i = 0; i < captionRowNum; i++) {
             const caption = captions[i];
             caption.classList.add("ytp-deepl-caption-segment");
             caption.setAttribute("style", `
