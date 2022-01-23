@@ -28,6 +28,7 @@ export class Caption
         return numbers[0] * 60 + numbers[1]
     }
 
+    // todo: 名前と処理が一致していないのでリネームする
     static parseCaptionString(captionString: string) : string
     {
         return captionString

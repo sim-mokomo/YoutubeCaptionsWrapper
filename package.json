@@ -4,7 +4,7 @@
   "description": "",
   "main": "background.js",
   "scripts": {
-    "test": "jest",
+    "test": "tsc && jest",
     "build": "tsc && npx webpack"
   },
   "repository": {
@@ -19,12 +19,15 @@
   },
   "homepage": "https://github.com/sim-mokomo/YoutubeCaptionsWrapper#readme",
   "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.16.8",
+    "@babel/preset-env": "^7.16.11",
     "@types/chrome": "^0.0.128",
     "@types/firebase": "^3.2.1",
     "@types/google-apps-script": "^1.0.21",
     "@types/jest": "^27.4.0",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
+    "babel-jest": "^27.4.6",
     "eslint": "^7.24.0",
     "firebase": "^8.6.2",
     "jest": "^27.4.7",
