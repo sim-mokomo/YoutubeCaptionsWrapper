@@ -13,7 +13,7 @@ export class Youtube
         return videoId
     }
 
-    static getCurrentCaptionLanguage() : string {
+    static getCaptionLanguageFromDocument(document: Document) : string {
         // note: フォーマット例: <div id="label-text" class="style-scope yt-dropdown-menu">英語</div>
         const captionLanguageDOM = document.getElementById("label-text")
         const language = captionLanguageDOM != null ? captionLanguageDOM.innerText : ""

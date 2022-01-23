@@ -13,10 +13,10 @@ async function run() {
     chrome.runtime.onMessage.addListener(async function (message, sender, sendResponse) {
         if(message.methodName == "onNotifyConvert"){
             const videoId = Youtube.getCurrentUrlVideoId()
-            const captionLanguage = Youtube.getCurrentCaptionLanguage()
+            const captionLanguage = Youtube.getCaptionLanguageFromDocument(document)
             const hasCaption = await new TranslatedCaptionsRepository().hasCaption(videoId, captionLanguage)
             if(hasCaption) {
-                await replaceByJapaneseCaption(Youtube.getCurrentCaptionLanguage())
+                await replaceByJapaneseCaption(Youtube.getCaptionLanguageFromDocument(document))
                 notifyUpdateTranslatedProgress(100)
             }else{
                 const currentCaptionList = getCurrentCaptionList()
@@ -26,7 +26,7 @@ async function run() {
                     notifyUpdateTranslatedProgress(progress)
                 })
                 await saveTranslatedCaptionList(japaneseCaptionList, videoId, captionLanguage)
-                await replaceByJapaneseCaption(Youtube.getCurrentCaptionLanguage())
+                await replaceByJapaneseCaption(Youtube.getCaptionLanguageFromDocument(document))
             }
         }
         return false

@@ -19,6 +19,7 @@ export class Caption {
             .map(x => parseInt(x));
         return numbers[0] * 60 + numbers[1];
     }
+    // todo: 名前と処理が一致していないのでリネームする
     static parseCaptionString(captionString) {
         return captionString
             .trim()
